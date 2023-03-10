@@ -1,2 +1,6 @@
+# ignore all txt files except requirements.txt
 *.txt
+!requirements.txt
+
+# ignore all .env files
 *.env
