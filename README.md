@@ -1,7 +1,7 @@
 # Roll20AverageRolls
 ---
 
-Script to take the chat log in Roll20 Campaign and calculate each character's average Dice Rolls.
+Script to take the chat log in [Roll20](https://roll20.net/welcome) Campaign and calculate each character's average Dice Rolls.
 
 ## Installation
 
