@@ -3,6 +3,14 @@
 
 Script to take the chat log in Roll20 Campaign and calculate each character's average Dice Rolls.
 
+## Installation
+
+1. Clone the repo
+
+```sh
+git clone https://github.com/nolanwinsman/Roll20AverageRolls.git
+```
+
 ## Requirements
 
 - Python
@@ -42,3 +50,15 @@ python main.py
 to run the script and it should output the statistics for each characters rolls.
 
 ## How it Works
+
+## Files
+
+# Contact
+
+Nolan Winsman - [@Github](https://github.com/nolanwinsman) - nolanwinsman@gmail.com
+
+Project Link: [https://github.com/nolanwinsman/ArchNolan](https://github.com/nolanwinsman/ArchNolan)
+
+# Contributers
+
+- nolanwinsman
