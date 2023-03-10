@@ -51,7 +51,7 @@ def main():
         
             if name is not None:
                 current_name = name
-                current_roll = None
+                current_roll = None # fixes some edge cases
             if roll is not None:
                 current_roll = roll
 
