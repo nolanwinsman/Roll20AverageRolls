@@ -3,13 +3,19 @@ import re
 log_file = 'chat-log.txt'
 roll_data = {}
 NAMES = [] # names should be loaded in from .env file
+import argparse
 
 def load_names():
     global NAMES
     with open("names.txt", "r") as f:
         NAMES = [line.strip() for line in f]
 
+def arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-r", "--show-rolls", help="show rolls", action="store_true")
+    args = parser.parse_args()
 
+    return args.show_rolls
 
 def add_roll(name, dice, result):
     if name not in  roll_data:
@@ -35,6 +41,7 @@ def find_name(s):
 
 def main():
     load_names()
+    show_rolls = arguments()
 
     with open(log_file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -59,7 +66,7 @@ def main():
         print(f"{name}:")
         for dice_type, rolls in dice_data.items():
             avg_roll = sum(rolls) / len(rolls)
-            print(f"  d{dice_type}: number of rolls: {len(rolls)} rolls: {None}(avg: {avg_roll:.2f})")
+            print(f"  d{dice_type}: number of rolls: {len(rolls)} rolls: {rolls if show_rolls else ''} (avg: {avg_roll:.2f})")
 
 
 if __name__ == "__main__":
