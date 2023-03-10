@@ -58,12 +58,11 @@ python main.py -r
 The script parses the DnD chat log to calculate how many rolls each character did and what the results were. So for an example like this.
 
 ```
-Kimmo:rolling d20
+Ezekiel Steadywater:rolling d20
 (
 15
 )
 =15
-Ezekiel Steadywater:
 rolling d20
 (
 10
@@ -80,12 +79,10 @@ Darius Innocentini:rolling 1d20 + 5
 It would output the following.
 
 ```
-Kimmo:
-  d20: number of rolls: 1 rolls: None(avg: 15.00)
 Ezekiel Steadywater:
-  d20: number of rolls: 1 rolls: None(avg: 10.00)
+  d20: number of rolls: 2 rolls:  (avg: 12.50)
 Darius Innocentini:
-  d20: number of rolls: 1 rolls: None(avg: 7.00)
+  d20: number of rolls: 1 rolls:  (avg: 7.00)
 ```
 
 ## Files
