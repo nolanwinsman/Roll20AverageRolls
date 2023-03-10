@@ -1,57 +1,71 @@
 import re
-import random
-from collections import defaultdict
+import os
+from dotenv import load_dotenv
 
-# function to parse dice notation
-def parse_dice(dice_str):
-    match = re.match(r'(\d*)d(\d+)([+-]\d+)?', dice_str)
-    if match:
-        num_dice = int(match.group(1)) if match.group(1) else 1
-        num_sides = int(match.group(2))
-        modifier = int(match.group(3)) if match.group(3) else 0
-        return num_dice, num_sides, modifier
-    else:
-        print(f"Invalid dice notation: {dice_str}")
-        return None
-
-
-# read chat log file
-with open('chat-log.txt', 'r', encoding='utf-8') as f:
-    lines = f.readlines()
-
-# initialize dictionary to store roll data for each character name
+log_file = 'chat-log.txt'
 roll_data = {}
+NAMES = [] # names should be loaded in from .env file
 
-# iterate over lines and update roll data for each character name
-for line in lines:
-    # extract character name and dice notation from line
-    match = re.search(r'(.+?):rolling\s+(.+)', line)
-    if match:
-        name = match.group(1)
-        dice_str = match.group(2)
-        # parse dice notation
-        dice_data = parse_dice(dice_str)
-        if dice_data is None:
-            continue
-        num_dice, num_sides, modifier = dice_data
-        # roll dice and calculate sum
-        roll_sum = sum(random.randint(1, num_sides) for _ in range(num_dice)) + modifier
-        # update roll data for character name
-        if name in roll_data:
-            roll_data[name]['sum'][num_sides] += roll_sum
-            roll_data[name]['count'][num_sides] += 1
-        else:
-            roll_data[name] = {'sum': defaultdict(int), 'count': defaultdict(int)}
-            roll_data[name]['sum'][num_sides] = roll_sum
-            roll_data[name]['count'][num_sides] = 1
+def add_roll(name, dice, result):
+    if name not in  roll_data:
+         roll_data[name] = {}
+    if dice not in  roll_data[name]:
+         roll_data[name][dice] = []
+    roll_data[name][dice].append(result)
+
+def find_roll(s):
+    pattern = r"d(\d+)"
+    if "rolling" in s.lower():
+        match = re.search(pattern, s)
+        if match:
+            roll_value = match.group(1)
+            return roll_value
+    return None
+
+def find_name(s):
+    for name in NAMES:
+        if name in s:
+            return name
+    return None
+
+def main():
+
+    load_dotenv()
+    global NAMES
+
+    names_str = os.getenv('NAMES')
+    if names_str is None:
+        raise ValueError('.env file is missing NAMES variable')
+    NAMES = names_str.split(",")
 
 
-# calculate average roll for each character name
-for name, data in roll_data.items():
-    print(name)
-    for num_sides, sum in data['sum'].items():
-        if data['count'][num_sides] > 0:
-            average_roll = sum / data['count'][num_sides]
-            print('  d{}: {:.2f}'.format(num_sides, average_roll))
-        else:
-            print('  d{}: no rolls found'.format(num_sides))
+    with open(log_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        current_name, current_roll = None, None
+        for i, line in enumerate(lines):
+            # previous_line = lines[i-1] if i > 0 else ""
+            # next_line = lines[i+1] if i < len(lines)-1 else ""
+
+            name =  find_name(line)
+            roll = find_roll(line)
+        
+            if name is not None:
+                current_name = name
+            if roll is not None:
+                current_roll = roll
+
+            if current_name != None and current_roll != None:
+                stripped_string = line.replace(" ", "").replace("\t", "").replace("\n", "")
+                if stripped_string.isdigit():
+                    print(stripped_string)
+                    add_roll(current_name, current_roll, int(stripped_string))
+
+    for name, dice_data in roll_data.items():
+        print(f"{name}:")
+        for dice_type, rolls in dice_data.items():
+            avg_roll = sum(rolls) / len(rolls)
+            print(f"  d{dice_type}: (avg: {avg_roll:.2f})")
+
+
+if __name__ == "__main__":
+    main()
