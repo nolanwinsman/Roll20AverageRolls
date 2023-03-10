@@ -51,20 +51,20 @@ def main():
         
             if name is not None:
                 current_name = name
+                current_roll = None
             if roll is not None:
                 current_roll = roll
 
             if current_name != None and current_roll != None:
                 stripped_string = line.replace(" ", "").replace("\t", "").replace("\n", "")
                 if stripped_string.isdigit():
-                    print(stripped_string)
                     add_roll(current_name, current_roll, int(stripped_string))
 
     for name, dice_data in roll_data.items():
         print(f"{name}:")
         for dice_type, rolls in dice_data.items():
             avg_roll = sum(rolls) / len(rolls)
-            print(f"  d{dice_type}: (avg: {avg_roll:.2f})")
+            print(f"  d{dice_type}: number of rolls: {len(rolls)} rolls: {None}(avg: {avg_roll:.2f})")
 
 
 if __name__ == "__main__":
