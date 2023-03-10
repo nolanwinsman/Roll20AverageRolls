@@ -1,6 +1,6 @@
 import re
 
-log_file = 'test.txt'
+log_file = 'chat-log.txt'
 roll_data = {}
 NAMES = [] # names should be loaded in from names.txt
 import argparse
