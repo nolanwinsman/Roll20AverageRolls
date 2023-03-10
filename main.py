@@ -1,10 +1,15 @@
 import re
-import os
-from dotenv import load_dotenv
 
 log_file = 'chat-log.txt'
 roll_data = {}
 NAMES = [] # names should be loaded in from .env file
+
+def load_names():
+    global NAMES
+    with open("names.txt", "r") as f:
+        NAMES = [line.strip() for line in f]
+
+
 
 def add_roll(name, dice, result):
     if name not in  roll_data:
@@ -29,22 +34,12 @@ def find_name(s):
     return None
 
 def main():
-
-    load_dotenv()
-    global NAMES
-
-    names_str = os.getenv('NAMES')
-    if names_str is None:
-        raise ValueError('.env file is missing NAMES variable')
-    NAMES = names_str.split(",")
-
+    load_names()
 
     with open(log_file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
         current_name, current_roll = None, None
         for i, line in enumerate(lines):
-            # previous_line = lines[i-1] if i > 0 else ""
-            # next_line = lines[i+1] if i < len(lines)-1 else ""
 
             name =  find_name(line)
             roll = find_roll(line)
